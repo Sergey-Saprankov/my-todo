@@ -1,0 +1,18 @@
+.container {
+    width: 10vw;
+    margin: 0 auto 30px auto;
+    display: flex;
+    color: #fff;
+}
+
+.box {
+    padding: 5px 15px;
+    background-color: #fff;
+    opacity: .8;
+    color: black;
+    border-radius: 15px;
+}
+
+.box:active {
+    transform: translateY(-2px);
+}

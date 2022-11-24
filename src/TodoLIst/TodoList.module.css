@@ -1,0 +1,13 @@
+.container {
+    min-width: 15vw;
+    max-width: max-content;
+    min-height: 10vh;
+    padding: 5px 15px;
+    background: #262626;
+    border-radius: 16px;
+}
+
+.title {
+    color: #fff;
+    text-transform: uppercase;
+}
