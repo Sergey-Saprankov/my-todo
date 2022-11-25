@@ -10,3 +10,10 @@
   height: 100vh;
 }
 
+.todoListContainer {
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 15px;
+  padding: 0 30px;
+}

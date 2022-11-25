@@ -1,5 +1,9 @@
 .container {
-    min-width: 15vw;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    flex-shrink: 2;
+    min-width: 30vw;
     max-width: max-content;
     min-height: 10vh;
     padding: 5px 15px;
@@ -10,4 +14,95 @@
 .title {
     color: #fff;
     text-transform: uppercase;
+    /* margin-bottom: 15px; */
 }
+
+
+.btn {
+    align-self: center;
+    width: 250px;
+    padding: 7px 10px;
+    background-color: #fff;
+    border-radius: 15px;
+    color: #000;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.btn:active {
+    transform: translateY(-2px);
+}
+
+.tasksContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-height: 200px;
+    min-width: 200px;
+}
+
+.taskContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    min-height: 100px;
+    padding: 10px;
+    border: 1px solid #fff;
+    border-radius: 10px;
+    color: #fff;
+}
+
+.low {
+    background-color: rgb(89, 68, 146);
+}
+
+.middle {
+    background-color: rgb(45, 86, 199);
+}
+
+.high {
+    background-color: rgb(158, 50, 73);
+}
+
+
+
+.titleText {
+    font-size: 22px;
+}
+
+.priorityText {
+    width: max-content;
+    padding: 2px 6px;
+    border: 1px solid #fff;
+    border-radius: 5px;
+    font-size: 12px;
+}
+
+.priorityText:hover {
+    transform: translateY(-3px);
+    transition: all linear .5;
+}
+
+.priorityText:active {
+    transform: translateY(3px);
+    transition: all linear .5;
+}
+
+.wrapperPriority {
+    display: flex;
+    gap: 5px;
+}
+
+.arrowContainer {
+    align-self: center;
+    width: 20px;
+    height: 20px;
+} 
+
+.arrow {
+    width: 15px;
+    height: 15px;
+    background-color: #fff;
+    transform: rotate(180deg);
+}
+
