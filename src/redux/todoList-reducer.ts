@@ -15,6 +15,7 @@ export const initialState: TodoListType[] = [
 ];
 
 export type AddTodoListACType = ReturnType<typeof addTodoListAC>
+export type ChangeFilterTodoListACType = ReturnType<typeof changeFilterTodoListAC>
 
 
 export const todoListReducer = (state: TodoListType[] = initialState, action: ActionType): TodoListType[] => {
@@ -26,6 +27,8 @@ export const todoListReducer = (state: TodoListType[] = initialState, action: Ac
                 filter: 'all'
             }
             return [newTodoList, ...state]
+        case 'CHANGE-FILTER':
+            return [...state.map(t => t.todoListId === action.todoListId ? {...t, filter: action.filter} : t)]
         default:
             return state
     }
@@ -37,4 +40,12 @@ export const addTodoListAC = () => {
         type: 'ADD-TODO-LIST',
         todoListId: v1()
         } as const
+}
+
+export const changeFilterTodoListAC = (todoListId: string, filter: FilterTaskType) => {
+    return {
+        type: 'CHANGE-FILTER',
+        todoListId,
+        filter
+    } as const
 }

@@ -1,5 +1,12 @@
-import {AddTodoListACType} from "../redux/todoList-reducer";
-import { AddTaskACType } from "../redux/task-reducer";
-import { ChangeTaskPriorityACType } from "../redux/task-reducer";
+import {AddTodoListACType, ChangeFilterTodoListACType} from "../redux/todoList-reducer";
+import {AddTaskACType, DeleteTaskACType, SortTaskACType, TaskIsDoneACType} from "../redux/task-reducer";
+import {ChangeTaskPriorityACType} from "../redux/task-reducer";
 
-export type ActionType = AddTodoListACType | AddTaskACType | ChangeTaskPriorityACType
+export type ActionType =
+    AddTodoListACType
+    | AddTaskACType
+    | ChangeTaskPriorityACType
+    | DeleteTaskACType
+    | TaskIsDoneACType
+    | SortTaskACType
+    | ChangeFilterTodoListACType
