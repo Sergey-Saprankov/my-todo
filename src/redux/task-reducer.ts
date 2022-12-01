@@ -70,9 +70,6 @@ export const taskReducer = (state: TaskStateType = initialStateTask, action: Act
                         ? 1 : a.priority === 'high' && b.priority === 'done' ? 1 : a.priority === 'middle' && b.priority === 'low' ? 1 :
                             a.priority === 'middle' && b.priority === 'done' ? 1 : a.priority === 'low' && b.priority === 'done' ? 1 : -1;
                 }).reverse()}
-         case 'CHANGE-FILTER':
-             const newState = {...state, [action.todoListId]: state[action.todoListId].map(el => ({...el}))}
-             return {...newState, [action.todoListId]: newState[action.todoListId].filter(t => action.filter === "active" ? !t.isDone : action.filter === "completed" ? t.isDone : t)}
         default:
             return state;
     }

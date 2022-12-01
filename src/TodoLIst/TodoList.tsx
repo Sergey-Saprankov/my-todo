@@ -1,6 +1,6 @@
 import React, {ChangeEvent} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {addTodoListAC, changeFilterTodoListAC, TodoListType} from "../redux/todoList-reducer";
+import {changeFilterTodoListAC, TodoListType} from "../redux/todoList-reducer";
 import s from "./TodoList.module.css";
 import {StoreType} from "../redux/store";
 import {
@@ -13,6 +13,8 @@ import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import AddIcon from '@mui/icons-material/Add';
 import SortIcon from '@mui/icons-material/Sort';
+import SettingsIcon from '@mui/icons-material/Settings';
+import {Filter} from "../Filter/Filter";
 
 
 export const TodoList: React.FC<TodoListType> = ({
@@ -25,16 +27,20 @@ export const TodoList: React.FC<TodoListType> = ({
         (state) => state.tasksListData
     );
 
+    const filteredTasks = {
+        ...tasks,
+        [todoListId]: tasks[todoListId].filter(t => filter === "active" ? !t.isDone : filter === "completed" ? t.isDone : t)
+    }
+
     const addTaskHandler = () => {
         dispatch(addTaskAC(todoListId));
     };
 
     const sortTaskHandler = () => {
-        debugger
         dispatch(sortTaskAC(todoListId))
     }
 
-    const tasksMap = tasks[todoListId]?.map((task) => {
+    const tasksMap = filteredTasks[todoListId]?.map((task) => {
         const onChangePriority = () => {
             if (!task.isDone) {
                 dispatch(changeTaskPriorityAC(task.priority, todoListId, task.taskId, task.isDone));
@@ -54,7 +60,6 @@ export const TodoList: React.FC<TodoListType> = ({
             >
                 <div className={s.taskWrapper}>
                     <div className={s.titleText}>{task.taskTitle}</div>
-                    <div>{task.description}</div>
                     <div className={s.wrapperPriority}>
                         <div onClick={onChangePriority} className={s.priorityText}>
                             <div>{task.priority}</div>
@@ -81,26 +86,7 @@ export const TodoList: React.FC<TodoListType> = ({
         <div className={s.container}>
             <div className={s.todoListTitleContainer}>
                 <div className={s.title}>{todoListTitle}</div>
-                <div className={s.filterContainer}>
-
-                        <span>Filter:</span>
-                        <Stack direction="row" spacing={1}>
-                            <Button onClick={() => dispatch(changeFilterTodoListAC(todoListId, 'all'))} sx={{fontSize: "10px", border: "1px solid #fff", color: "#fff", minWidth: "max-content"}} variant="outlined">All</Button>
-                            <Button onClick={() => dispatch(changeFilterTodoListAC(todoListId, 'active'))} sx={{fontSize: "10px", border: "1px solid #fff", color: "#fff", minWidth: "max-content"}} variant="outlined">Active</Button>
-                            <Button onClick={() => dispatch(changeFilterTodoListAC(todoListId, 'completed'))} sx={{fontSize: "10px", border: "1px solid #fff", color: "#fff", minWidth: "max-content"}} variant="outlined" href="#outlined-buttons">Completed</Button>
-                        </Stack>
-
-                    <SortIcon onClick={sortTaskHandler} sx={{
-                        color: '#fff',
-                        alignSelf: 'center',
-                        '&:hover': {
-                            transform: "translateY(-1px)",
-                        },
-                        '&:active': {
-                            transform: "translateY(2px)",
-                        }
-                    }}/>
-                </div>
+                   <Filter filter={filter} todoListId={todoListId}/>
             </div>
             <div className={s.tasksContainer}>{tasksMap}</div>
             <Button
