@@ -1,4 +1,9 @@
 .container {
+    position: relative;
+
+}
+.wrapper {
+    padding: 30px 15px 10px 15px;
     display: flex;
     flex-direction: column;
     gap: 15px;
@@ -6,9 +11,14 @@
     min-width: 30vw;
     max-width: max-content;
     min-height: 10vh;
-    padding: 15px 15px;
     background: #262626;
     border-radius: 16px;
+}
+
+.todoListClose {
+    position: absolute;
+    top: 0.5%;
+    right: 0.5%;
 }
 
 .todoListTitleContainer {

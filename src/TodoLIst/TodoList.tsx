@@ -1,12 +1,12 @@
-import React, {ChangeEvent} from "react";
+import React, {ChangeEvent, useCallback} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {changeFilterTodoListAC, TodoListType} from "../redux/todoList-reducer";
+import {changeFilterTodoListAC, FilterTaskType, TodoListType} from "../redux/todoList-reducer";
 import s from "./TodoList.module.css";
 import {StoreType} from "../redux/store";
 import {
     addTaskAC,
     TaskStateType,
-    changeTaskPriorityAC, deleteTaskAC, taskIsDoneAC, sortTaskAC,
+    changeTaskPriorityAC, deleteTaskAC, taskIsDoneAC, sortTaskAC, TaskType,
 } from "../redux/task-reducer";
 import {Button, Checkbox, Stack} from "@mui/material"
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
@@ -15,43 +15,74 @@ import AddIcon from '@mui/icons-material/Add';
 import SortIcon from '@mui/icons-material/Sort';
 import SettingsIcon from '@mui/icons-material/Settings';
 import {Filter} from "../Filter/Filter";
+import {logDOM} from "@testing-library/react";
+import {TextArea} from "../EditableSpan/TextArea";
+
+type TodoListPropsType = {
+    tasks: TaskType[]
+    todoListId: string
+    todoListTitle: string
+    filter: FilterTaskType
+    addTaskHandler: (todoListId: string) => void
+    sortTasks: (todoListId: string) => void
+    changeFilterTodoList: (todoListId: string, filter: FilterTaskType) => void
+    onChangeTaskPriority: (priority: string, todoListId: string, taskId: string, isDone: boolean) => void
+    deleteTask: (todoListId: string, taskId: string) => void
+    onChangeCheckbox: (todoListId: string, taskId: string, value: boolean) => void
+    deleteTodoList: (todoListId: string) => void
+    changeTodoListTitle: (todoListId: string, todoListTitle: string) => void
+    changeTaskTitle: (todoListId: string,  taskId: string, taskTitle: string) => void
+}
 
 
-export const TodoList: React.FC<TodoListType> = ({
-                                                     todoListTitle,
-                                                     todoListId,
-                                                     filter,
-                                                 }) => {
-    const dispatch = useDispatch();
-    const tasks = useSelector<StoreType, TaskStateType>(
-        (state) => state.tasksListData
-    );
+export const TodoList: React.FC<TodoListPropsType> = React.memo(({
+                                                                     todoListTitle,
+                                                                     todoListId,
+                                                                     filter,
+                                                                     tasks,
+                                                                     addTaskHandler,
+                                                                     sortTasks,
+                                                                     changeFilterTodoList,
+                                                                     onChangeTaskPriority,
+                                                                     deleteTask,
+                                                                     onChangeCheckbox,
+                                                                     deleteTodoList,
+                                                                     changeTodoListTitle,
+                                                                     changeTaskTitle
+                                                                 }) => {
 
-    const filteredTasks = {
-        ...tasks,
-        [todoListId]: tasks[todoListId].filter(t => filter === "active" ? !t.isDone : filter === "completed" ? t.isDone : t)
-    }
-
-    const addTaskHandler = () => {
-        dispatch(addTaskAC(todoListId));
+    const filteredTasks = [...tasks.map(t => ({...t})).filter(t => filter === "active" ? !t.isDone : filter === "completed" ? t.isDone : t)]
+    const addOnClickTaskHandler = () => {
+        addTaskHandler(todoListId)
     };
 
-    const sortTaskHandler = () => {
-        dispatch(sortTaskAC(todoListId))
+    const removeTodoListHandler = () => {
+        deleteTodoList(todoListId)
     }
+    const sortTasksByFilter = useCallback(() => sortTasks(todoListId), [todoListId])
+    const changeFilterByFilter = useCallback((filter: FilterTaskType) => {
+        changeFilterTodoList(todoListId, filter)
+    }, [todoListId, filter])
+    const changeTodoListTitleByTextArea = useCallback((value: string) => {
+        changeTodoListTitle(todoListId, value)
+    }, [todoListId])
 
-    const tasksMap = filteredTasks[todoListId]?.map((task) => {
+
+    const tasksMap = filteredTasks?.map((task) => {
+        const changeTaskTitleByTextArea = (value: string) => {
+            changeTaskTitle(todoListId, task.taskId, value)
+        }
         const onChangePriority = () => {
             if (!task.isDone) {
-                dispatch(changeTaskPriorityAC(task.priority, todoListId, task.taskId, task.isDone));
+                onChangeTaskPriority(task.priority, todoListId, task.taskId, task.isDone);
             }
         };
         const deleteTaskHandler = () => {
-            dispatch(deleteTaskAC(todoListId, task.taskId))
+            deleteTask(todoListId, task.taskId)
         }
         const onChangeCheckboxHandler = (e: ChangeEvent<HTMLInputElement>) => {
             const isDone = e.currentTarget.checked
-            dispatch(taskIsDoneAC(todoListId, task.taskId, isDone))
+            onChangeCheckbox(todoListId, task.taskId, isDone)
         }
         return (
             <div
@@ -59,7 +90,7 @@ export const TodoList: React.FC<TodoListType> = ({
                 key={task.taskId}
             >
                 <div className={s.taskWrapper}>
-                    <div className={s.titleText}>{task.taskTitle}</div>
+                    <TextArea callBack={changeTaskTitleByTextArea}  placeholder={'Task title'} title={task.taskTitle}/>
                     <div className={s.wrapperPriority}>
                         <div onClick={onChangePriority} className={s.priorityText}>
                             <div>{task.priority}</div>
@@ -84,28 +115,38 @@ export const TodoList: React.FC<TodoListType> = ({
 
     return (
         <div className={s.container}>
-            <div className={s.todoListTitleContainer}>
-                <div className={s.title}>{todoListTitle}</div>
-                   <Filter filter={filter} todoListId={todoListId}/>
+            <div className={s.todoListClose}>
+                <HighlightOffIcon onClick={removeTodoListHandler} sx={{
+                    color: "#b2102f", '&:hover': {
+                        transform: "translateY(1px)"
+                    }
+                }}/>
             </div>
-            <div className={s.tasksContainer}>{tasksMap}</div>
-            <Button
-                onClick={addTaskHandler}
-                sx={{
-                    color: "#000",
-                    width: '250px',
-                    alignSelf: 'center',
-                    background: "#fff",
-                    fontWeight: "bold",
-                    '&:hover': {
-                        transform: "translateY(-1px)",
-                        backgroundColor: '#fff',
-                        borderColor: '#0062cc',
-                        boxShadow: 'none',
-                    },
-                }} variant="contained" endIcon={<AddIcon/>}>
-                Add new task
-            </Button>
+            <div className={s.wrapper}>
+                <div className={s.todoListTitleContainer}>
+                    {/*<div className={s.title}>{todoListTitle}</div>*/}
+                    <TextArea callBack={changeTodoListTitleByTextArea} placeholder={'Todo List title'} title={todoListTitle}/>
+                    <Filter changeFilterByFilter={changeFilterByFilter} sortTasksByFilter={sortTasksByFilter}
+                            filter={filter} todoListId={todoListId}/>
+                </div>
+                <div className={s.tasksContainer}>{tasksMap}</div>
+                <Button
+                    onClick={addOnClickTaskHandler}
+                    sx={{
+                        color: "#000",
+                        width: '250px',
+                        alignSelf: 'center',
+                        background: "#fff",
+                        fontWeight: "bold",
+                        '&:hover': {
+                            transform: "translateY(-1px)",
+                            backgroundColor: '#fff',
+                            borderColor: '#0062cc',
+                            boxShadow: 'none',
+                        },
+                    }} variant="contained" endIcon={<AddIcon/>}>
+                    Add new task
+                </Button></div>
         </div>
     );
-};
+});

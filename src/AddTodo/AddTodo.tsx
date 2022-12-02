@@ -7,10 +7,14 @@ import AddIcon from "@mui/icons-material/Add";
 import {Button} from "@mui/material";
 
 
-export const AddTodo = () => {
-    const dispatch = useDispatch()
+type AddTodoType = {
+    addTodoList: () => void
+}
+
+export const AddTodo: React.FC<AddTodoType> = React.memo(({addTodoList}) => {
+
     const addTodoListHandler = () => {
-        dispatch(addTodoListAC())
+        addTodoList()
     }
     return (
         <div className={s.container}>
@@ -35,4 +39,4 @@ export const AddTodo = () => {
             </div>
         </div>
     )
-}
+})

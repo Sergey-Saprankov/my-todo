@@ -24,6 +24,7 @@ export type ChangeTaskPriorityACType = ReturnType<typeof changeTaskPriorityAC>
 export type DeleteTaskACType = ReturnType<typeof deleteTaskAC>
 export type TaskIsDoneACType = ReturnType<typeof taskIsDoneAC>
 export type SortTaskACType = ReturnType<typeof sortTaskAC>
+export type ChangeTaskTitleACType = ReturnType<typeof changeTaskTitleAC>
 
 export const taskReducer = (state: TaskStateType = initialStateTask, action: ActionType): TaskStateType => {
     switch (action.type) {
@@ -70,6 +71,11 @@ export const taskReducer = (state: TaskStateType = initialStateTask, action: Act
                         ? 1 : a.priority === 'high' && b.priority === 'done' ? 1 : a.priority === 'middle' && b.priority === 'low' ? 1 :
                             a.priority === 'middle' && b.priority === 'done' ? 1 : a.priority === 'low' && b.priority === 'done' ? 1 : -1;
                 }).reverse()}
+        case "REMOVE-TODO-LIST":
+            delete state[action.todoListId]
+            return {...state}
+        case "CHANGE-TASK-TITLE":
+            return {...state, [action.todoListId]: state[action.todoListId].map(t => t.taskId === action.taskId ? {...t, taskTitle: action.taskTitle} : t)}
         default:
             return state;
     }
@@ -115,5 +121,14 @@ export const sortTaskAC = (todoListId: string) => {
     return {
         type: "SORT-TASK",
         todoListId,
+    } as const
+}
+
+export const changeTaskTitleAC = (todoListId: string,  taskId: string, taskTitle: string) => {
+    return {
+        type: "CHANGE-TASK-TITLE",
+        todoListId,
+        taskId,
+        taskTitle
     } as const
 }

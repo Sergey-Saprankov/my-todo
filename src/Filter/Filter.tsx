@@ -7,37 +7,44 @@ import SortIcon from "@mui/icons-material/Sort";
 import {useDispatch} from "react-redux";
 import {sortTaskAC} from "../redux/task-reducer";
 import style from "./Filter.module.css"
+import {logDOM} from "@testing-library/react";
 
 type FilterType = {
     filter: FilterTaskType
     todoListId: string
+    sortTasksByFilter: () => void
+    changeFilterByFilter: (filter: FilterTaskType) => void
 }
 
-export const Filter: React.FC<FilterType> = ({todoListId, filter}) => {
+export const Filter: React.FC<FilterType> = React.memo(({todoListId, filter, sortTasksByFilter, changeFilterByFilter}) => {
     const [visible, setVisible] = useState<boolean>(false)
-    const dispatch = useDispatch();
-    const sortTaskHandler = () => {
-        dispatch(sortTaskAC(todoListId))
+    console.log('filter')
+    const changeFilterTodoListHandler = (filter: FilterTaskType) => {
+        changeFilterByFilter(filter)
     }
+    const sortTaskHandler = () => {
+        sortTasksByFilter()
+    }
+
     return (
         <div className={style.filterContainer}>
             {
                 visible && <div className={s.filterContainer}>
                     <span>Filter:</span>
                     <Stack direction="row" spacing={1}>
-                        <Button onClick={() => dispatch(changeFilterTodoListAC(todoListId, 'all'))} sx={{
+                        <Button onClick={() => changeFilterTodoListHandler('all')} sx={{
                             fontSize: "10px",
                             border: filter === 'all' ? '1px solid #3f51b5' : '1px solid #fff',
                             color: "#fff",
                             minWidth: "max-content"
                         }} variant="outlined">All</Button>
-                        <Button onClick={() => dispatch(changeFilterTodoListAC(todoListId, 'active'))} sx={{
+                        <Button onClick={() => changeFilterTodoListHandler('active')} sx={{
                             fontSize: "10px",
                             border: filter === 'active' ? '1px solid #3f51b5' : '1px solid #fff',
                             color: "#fff",
                             minWidth: "max-content"
                         }} variant="outlined">Active</Button>
-                        <Button onClick={() => dispatch(changeFilterTodoListAC(todoListId, 'completed'))} sx={{
+                        <Button onClick={() => changeFilterTodoListHandler('completed')} sx={{
                             fontSize: "10px",
                             border: filter === 'completed' ? '1px solid #3f51b5' : '1px solid #fff',
                             color: "#fff",
@@ -77,4 +84,4 @@ export const Filter: React.FC<FilterType> = ({todoListId, filter}) => {
             }}/>
         </div>
     )
-}
+})
