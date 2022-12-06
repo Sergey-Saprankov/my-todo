@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import s from "../TodoLIst/TodoList.module.css";
+import s from "../TodoList/TodoList.module.css";
 import SettingsIcon from "@mui/icons-material/Settings";
 import {Button, Stack} from "@mui/material";
 import {changeFilterTodoListAC, FilterTaskType} from "../redux/todoList-reducer";
@@ -30,7 +30,7 @@ export const Filter: React.FC<FilterType> = React.memo(({todoListId, filter, sor
         <div className={style.filterContainer}>
             {
                 visible && <div className={s.filterContainer}>
-                    <span>Filter:</span>
+                    <span className={style.text}>Filter:</span>
                     <Stack direction="row" spacing={1}>
                         <Button onClick={() => changeFilterTodoListHandler('all')} sx={{
                             fontSize: "10px",

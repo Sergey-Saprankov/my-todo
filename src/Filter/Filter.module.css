@@ -2,4 +2,9 @@
     display: flex;
     gap: 10px;
     color: #fff;
+    align-items: center;
+}
+
+.text {
+    align-self: center;
 }

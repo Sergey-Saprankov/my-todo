@@ -1,5 +1,5 @@
 .container {
-    width: 10vw;
+    width: max-content;
     margin: 0 auto 30px auto;
     display: flex;
     color: #fff;

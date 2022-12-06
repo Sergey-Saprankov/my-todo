@@ -11,7 +11,7 @@ import {
     removeTodoListAC,
     TodoListType
 } from "./redux/todoList-reducer";
-import {TodoList} from "./TodoLIst/TodoList";
+import {TodoList} from "./TodoList/TodoList";
 import {
     addTaskAC,
     changeTaskPriorityAC, changeTaskTitleAC,
@@ -80,7 +80,6 @@ function App() {
                       filter={filter}/>
         )
     })
-
 
     return (
         <div className="App">

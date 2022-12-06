@@ -2,12 +2,14 @@ import React, {useCallback} from "react";
 import {FilterTaskType} from "../redux/todoList-reducer";
 import s from "./TodoList.module.css";
 import {TaskType,} from "../redux/task-reducer";
-import {Button, Checkbox, Stack} from "@mui/material"
+import {Button, Checkbox, Stack, SvgIconTypeMap} from "@mui/material"
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import AddIcon from '@mui/icons-material/Add';
 import {Filter} from "../Filter/Filter";
-import {TextArea} from "../EditableSpan/TextArea";
+import {TextArea} from "../TextArea/TextArea";
 import {Task} from "../Task/Task";
+
+import {SuperButton} from "../SuperButton/SuperButton";
 
 type TodoListPropsType = {
     tasks: TaskType[]
@@ -43,9 +45,9 @@ export const TodoList: React.FC<TodoListPropsType> = React.memo(({
                                                                  }) => {
 
     const filteredTasks = [...tasks.map(t => ({...t})).filter(t => filter === "active" ? !t.isDone : filter === "completed" ? t.isDone : t)]
-    const addOnClickTaskHandler = () => {
+    const addOnClickTaskHandler = useCallback(() => {
         addTaskHandler(todoListId)
-    };
+    }, [todoListId, addTaskHandler]);
 
     const removeTodoListHandler = () => {
         deleteTodoList(todoListId)
@@ -57,7 +59,6 @@ export const TodoList: React.FC<TodoListPropsType> = React.memo(({
     const changeTodoListTitleByTextArea = useCallback((value: string) => {
         changeTodoListTitle(todoListId, value)
     }, [todoListId, changeTodoListTitle])
-
 
     const tasksMap = filteredTasks?.map((t) => {
 
@@ -78,7 +79,7 @@ export const TodoList: React.FC<TodoListPropsType> = React.memo(({
         <div className={s.container}>
             <div className={s.todoListClose}>
                 <HighlightOffIcon onClick={removeTodoListHandler} sx={{
-                    color: "#b2102f", '&:hover': {
+                    color: "#fff", '&:hover': {
                         transform: "translateY(1px)"
                     }
                 }}/>
@@ -94,24 +95,18 @@ export const TodoList: React.FC<TodoListPropsType> = React.memo(({
                         sortTasksByFilter={sortTasksByFilter}
                         filter={filter} todoListId={todoListId}/>
                 </div>
-                <div className={s.tasksContainer}>{tasksMap}</div>
-                <Button
-                    onClick={addOnClickTaskHandler}
-                    sx={{
-                        color: "#000",
-                        width: '250px',
-                        alignSelf: 'center',
-                        background: "#fff",
-                        fontWeight: "bold",
-                        '&:hover': {
-                            transform: "translateY(-1px)",
-                            backgroundColor: '#fff',
-                            borderColor: '#0062cc',
-                            boxShadow: 'none',
-                        },
-                    }} variant="contained" endIcon={<AddIcon/>}>
-                    Add new task
-                </Button></div>
+                <div className={s.tasksContainer}>
+                    {tasksMap}
+                </div>
+                <SuperButton callBack={addOnClickTaskHandler}
+                             endIcon={<AddIcon/>}
+                             title={'Add new task'}
+                             backgroundColor={'#a7bcdc'}
+                             color={'#7a0000'}
+                />
+            </div>
         </div>
     );
 });
+
+

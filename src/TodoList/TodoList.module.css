@@ -8,7 +8,7 @@
     flex-direction: column;
     gap: 15px;
     flex-shrink: 2;
-    min-width: 30vw;
+    min-width: 340px;
     max-width: max-content;
     min-height: 10vh;
     background: #262626;
@@ -24,6 +24,7 @@
 .todoListTitleContainer {
     display: flex;
     justify-content: space-between;
+    gap: 40px;
 }
 
 .title {
@@ -34,6 +35,7 @@
 
 .tasksContainer {
     display: flex;
+    flex-wrap: wrap;
     flex-direction: column;
     gap: 10px;
     min-height: 200px;
@@ -42,8 +44,9 @@
 
 .taskContainer {
     display: flex;
+    justify-content: space-between;
     position: relative;
-    gap: 20px;
+    min-width: 400px;
     min-height: 100px;
     padding: 10px;
     border: 1px solid #fff;
@@ -87,8 +90,9 @@
     font-size: 22px;
 }
 
-.priorityText {
+.priorityTextContainer {
     display: flex;
+    gap: 5px;
     width: max-content;
     padding: 2px 6px;
     border: 1px solid #fff;
@@ -96,14 +100,18 @@
     font-size: 12px;
 }
 
-.priorityText:hover {
+.priorityTextContainer:hover {
     transform: translateY(-3px);
     transition: all linear .3s;
 }
 
-.priorityText:active {
+.priorityTextContainer:active {
     transform: translateY(3px);
     transition: all linear .3s;
+}
+
+.priorityText {
+    align-self: center;
 }
 
 .wrapperPriority {
@@ -113,7 +121,8 @@
 
 .clearContainer {
     position: absolute;
-    right: 3%;
+    top: 1%;
+    right: 1%;
 }
 
 .filterContainer {
