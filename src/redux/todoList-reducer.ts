@@ -16,7 +16,6 @@ export const initialState: TodoListType[] = [
 
 export type AddTodoListACType = ReturnType<typeof addTodoListAC>
 export type ChangeFilterTodoListACType = ReturnType<typeof changeFilterTodoListAC>
-export type ChangeTodoListACType = ReturnType<typeof changeTodoListAC>
 export type RemoveTodoListACType = ReturnType<typeof removeTodoListAC>
 export type  ChangeTodoListTitleACType = ReturnType<typeof changeTodoListTitleAC>
 
@@ -57,14 +56,6 @@ export const changeFilterTodoListAC = (todoListId: string, filter: FilterTaskTyp
     } as const
 }
 
-
-export const changeTodoListAC = (todoListId: string , todoListTitle: string) => {
-    return {
-        type: 'CHANGE-TODO-LIST-TITLE',
-        todoListId,
-        todoListTitle
-    } as const
-}
 
 export const removeTodoListAC = (todoListId: string) => {
     return {

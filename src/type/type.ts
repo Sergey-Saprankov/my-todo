@@ -1,7 +1,7 @@
 import {
     AddTodoListACType,
     ChangeFilterTodoListACType,
-    ChangeTodoListACType, ChangeTodoListTitleACType,
+    ChangeTodoListTitleACType,
     RemoveTodoListACType
 } from "../redux/todoList-reducer";
 import {
@@ -21,7 +21,6 @@ export type ActionType =
     | TaskIsDoneACType
     | SortTaskACType
     | ChangeFilterTodoListACType
-    | ChangeTodoListACType
     | RemoveTodoListACType
     | ChangeTodoListTitleACType
     | ChangeTaskTitleACType
